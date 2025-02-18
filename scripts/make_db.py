@@ -3,7 +3,6 @@
 import os
 import json
 import sqlite3
-from fuzzywuzzy import fuzz
 
 conn = sqlite3.connect("../vods.db")
 c = conn.cursor()
