@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 
 API_KEY = '' # Google YouTube Data API v3 key
 CHANNEL_ID = '' # YouTube channel ID (Share channel -> Copy channel ID)
-VOD_JSON = 'YUY_VOD_metadata.json'
+VOD_JSON = '../YUY_VOD_metadata.json'
 
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
