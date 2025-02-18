@@ -4,7 +4,7 @@ import os
 import json
 import sqlite3
 
-conn = sqlite3.connect("../vods.db")
+conn = sqlite3.connect("../transcripts.db")
 c = conn.cursor()
 
 c.execute("""CREATE TABLE vods(text,start,duration,videoId);""")
