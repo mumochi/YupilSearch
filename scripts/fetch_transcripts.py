@@ -6,7 +6,7 @@ import json
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import JSONFormatter
 
-VOD_JSON = 'YUY_VOD_metadata.json'
+VOD_JSON = '../YUY_VOD_metadata.json'
 
 formatter = JSONFormatter()
 
