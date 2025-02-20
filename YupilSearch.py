@@ -14,7 +14,7 @@ guild_obj = discord.Object(id = "") # Discord server ID
 
 conn = sqlite3.connect("transcripts.db")
 c = conn.cursor()
-c.execute("""SELECT * FROM vods WHERE (LENGTH(text) - LENGTH(REPLACE(text, ' ', ''))) >= 2;""")
+c.execute("""SELECT * FROM vods WHERE (LENGTH(text) - LENGTH(REPLACE(text, ' ', ''))) >= 3;""")
 output = c.fetchall()
 c.close()
 
