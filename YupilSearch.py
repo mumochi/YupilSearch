@@ -14,7 +14,7 @@ guild_obj = discord.Object(id = "") # Discord server ID
 
 conn = sqlite3.connect("transcripts.db")
 c = conn.cursor()
-c.execute("""SELECT * FROM vods""")
+c.execute("""SELECT * FROM vods WHERE (LENGTH(text) - LENGTH(REPLACE(text, ' ', ''))) >= 2;""")
 output = c.fetchall()
 c.close()
 
@@ -69,6 +69,10 @@ class PaginatorView(View):
         # Acknowledge the interaction without changing the current message
         await interaction.response.defer()
 
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user}')
+
 @tree.command(
     name = "search",
     description="Searches VOD transcripts for query."
@@ -78,17 +82,15 @@ class PaginatorView(View):
 )
 async def search(ctx: commands.Context, query: str):
     embeds = []
-    await ctx.response.defer()
+    await ctx.response.defer(ephemeral=True)
     for i in range(len(output)):
         context = output[i][0]
-        if context.count(" ") > 2:
-            if fuzz.token_set_ratio(output[i][0], query) >= SCORE_THRESHOLD:
-                vod_id = output[i][3]
-                vod_time = int(output[i][1])
-                url = f"https://www.youtube.com/watch?v={vod_id}&t={vod_time}"
-                embeds.append(discord.Embed(title=f"Query: {query}",
+        if fuzz.token_set_ratio(output[i][0], query) >= SCORE_THRESHOLD:
+            vod_id = output[i][3]
+            vod_time = int(output[i][1])
+            url = f"https://www.youtube.com/watch?v={vod_id}&t={vod_time}"
+            embeds.append(discord.Embed(title=f"Query: {query}",
                                             description=f"**Transcript context**: {output[i][0]}\nURL: {url}"))
-
     if len(embeds) == 0:
         embeds.append(Embed(title=f"Query: {query}",
                             description="No matches found."))
@@ -97,8 +99,4 @@ async def search(ctx: commands.Context, query: str):
         view = PaginatorView(embeds)
         await ctx.followup.send(embed=embeds[0], view=view)
 
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user}')
-  
-bot.run('') # Discord bot token
+bot.run("") # Discord bot token
